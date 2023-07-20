@@ -3,7 +3,6 @@ import userRouter from "./modules/user/user.router.js";
 import postRouter from "./modules/post/post.router.js";
 
 const bootstrap = async (app, express) => {
-  console.log("🚀 ~ file: index.router.js:6 ~ bootstrap ~ app:", app)
   app.use(express.json()); // convert buffer data
 
   // Database connection and seeding
