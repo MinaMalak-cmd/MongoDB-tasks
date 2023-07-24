@@ -25,7 +25,6 @@ export const getAllUsers = async (req, res, next) => {
 export const getUserProfile = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log("🚀 ~ file: user.js:28 ~ getUserProfile ~ id:", id)
     const user = await userModel.findById(id).populate([
       {
           path: "userId",
@@ -95,65 +94,7 @@ export const getAgeBetween = async (req, res, next) => {
     return res.json({ message: "Catch error" });
   }
 };
-export const addUser = async (req, res, next) => {
-  try {
-    const {
-      firstName,
-      lastName,
-      userName,
-      password,
-      email,
-      cPassword,
-      age,
-      gender,
-      phone,
-    } = req.body;
-    if (password != cPassword) {
-      return res.json({ message: "Password Mismatch cPassword" });
-    }
-    if (!["Male", "Female"].includes(gender)) {
-      return res.json({ message: "gender must be either Male or Female" });
-    }
-    const checkMail = await userModel.findOne({ email });
-    if (checkMail) return res.json({ message: "Email must be unique" });
-    const checkPhone = await userModel.findOne({ phone });
-    if (checkPhone) return res.json({ message: "Phone must be unique" });
-    const checkUserName = await userModel.findOne({ userName });
-    if (checkUserName) return res.json({ message: "User-name must be unique" });
-    const user = await userModel.create({
-      firstName,
-      lastName,
-      userName,
-      password,
-      email,
-      age,
-      gender,
-      phone,
-    });
-    return res.json({ message: "Done", user });
-  } catch (error) {
-    return res.json({ message: "Catch error", error });
-  }
-};
 
-export const login = async (req, res, next) => {
-  try {
-    const { userName, password, email, phone } = req.body;
-    const user = await userModel.findOne({
-      $or: [{ email }, { userName }, { phone }],
-      password,
-    });
-    if (!user) {
-      return res.json({ message: "Please enter valid credentials" });
-    }
-    return res.json({
-      message: `Hi ${user.firstName} ${user.lastName}`,
-      user: { userName: user.userName, age: user.age, gender: user.gender },
-    });
-  } catch (error) {
-    return res.json({ message: "Catch error" });
-  }
-};
 
 export const updateUser = async (req, res, next) => {
   try {

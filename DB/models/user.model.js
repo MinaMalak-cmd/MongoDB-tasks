@@ -15,6 +15,7 @@ const userSchema = new Schema({
     unique: true,
     type: String,
     required: true,
+    lowercase: true,
   },
   password: {
     type: String,
