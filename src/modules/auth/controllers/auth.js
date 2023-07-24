@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
 
 import userModel from "../../../../DB/models/user.model.js";
+import { asyncHandler } from "../../../utils/errorHandling.js";
 
-export const signup = async (req, res, next) => {
-  try {
+export const signup = asyncHandler(async (req, res, next) => {
+  // try {
     const {
       firstName,
       lastName,
@@ -27,9 +28,7 @@ export const signup = async (req, res, next) => {
     if (checkPhone) return res.json({ message: "Phone must be unique" });
     const checkUserName = await userModel.findOne({ userName });
     if (checkUserName) return res.json({ message: "User-name must be unique" });
-    // console.log("🚀 ~ file: auth.js:31 ~ signup ~ process.env.SALT_ROUND:", process.env.SALT_ROUND)
-    const hashPassword = bcrypt.hashSync(password, 10);
-    // console.log("🚀 ~ file: auth.js:31 ~ signup ~ hashPassword:", hashPassword)
+    const hashPassword = bcrypt.hashSync(password, parseInt(process.env.SALT_ROUND));
 
     const user = await userModel.create({
       firstName,
@@ -42,10 +41,10 @@ export const signup = async (req, res, next) => {
       phone,
     });
     return res.json({ message: "Done", user });
-  } catch (error) {
-    return res.json({ message: "Catch error", error });
-  }
-};
+  // } catch (error) {
+  //   return res.json({ message: "Catch error", error });
+  // }
+});
 export const login = async (req, res, next) => {
   try {
     const { userName, password, email, phone } = req.body;
