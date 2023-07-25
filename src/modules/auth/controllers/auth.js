@@ -18,6 +18,7 @@ export const signup = asyncHandler(async (req, res, next) => {
     } = req.body;
     if (password != cPassword) {
       return res.json({ message: "Password Mismatch cPassword" });
+      // return next(new Error("Password Mismatch"));
     }
     if (!["male", "female"].includes(gender)) {
       return res.json({ message: "gender must be either male or female" });
